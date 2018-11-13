@@ -32,7 +32,7 @@ repeticion = mi_cadena
 
 rago = len(repeticion) -1
 
-print("se están descargando %d imágenes" % (rago))
+print("se están descargando %d imágenes" % (len(repeticion))) # rago o len(repeticion) revisar posible error
 
 # loop para descargar las imágenes o mostrar un mensaje de error
 for i in range(rago):

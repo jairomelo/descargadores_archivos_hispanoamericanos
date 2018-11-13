@@ -19,16 +19,14 @@ txtnomb = glob.glob("*.txt")
 cadena = str(txtnomb)
 encadenado = ''.join(cadena).replace('[\'','').replace('\']','').replace(' ','')
 
-
 # convierte el texto en un array
 
 mi_lista = open(encadenado, 'r')
 mi_listado = mi_lista.read()
 mi_cadena = mi_listado.split(",")
 
-#################
-
 # guarda en la función "url_base" la dirección "estática" de cada elemento
+
 url_base = "http://consulta.archivogeneral.gov.co/ConsultaWeb/assets/image?id={}"
 repeticion = mi_cadena
 

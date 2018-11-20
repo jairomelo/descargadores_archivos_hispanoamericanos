@@ -1,45 +1,21 @@
 import urllib.request
-import glob, wget, csv
+import os
 
-print("Antes de utilizar este archivo, asegúrese que la carpeta desde la cual se ejecuta esté vacía de archivos *.jpg y *.txt")
-wait = input("Presione ENTER para continuar.")
+enlace = input('Enlace del número del periódico. <br /> Pegue la liga solamente hasta el signo de % \(ejemplo: http://consulta.archivogeneral.gov.co/ConsultaWeb/assets/image?id=\)<br /> : ')
+directorio = input('Ingresa el nombre de la carpeta para guardar las imágenes: ')
+init = input('Número de la imágen inicial: ')
+fin = input('Número de la página final: ')
 
-#Convierte archivo csv a texto
+os.makedirs(directorio)
 
-csv_file = input('Ingresa el nombre de tu archivo *.csv: ')
-txt_file = input('Nombre del archivo *.txt de salida: ')
-with open(txt_file, "w") as my_output_file:
-    with open(csv_file, "r") as my_input_file:
-        [ my_output_file.write(", ".join(row)) for row in csv.reader(my_input_file, delimiter=' ', quotechar='|')]
-    my_output_file.close()
+init_i = int(init)
+fin_i = int(fin)
 
-# extraer el nombre del archivo de texto
+url_base = "%s{}" % enlace
+lista = range(init_i,fin_i)
 
-txtnomb = glob.glob("*.txt")
-cadena = str(txtnomb)
-encadenado = ''.join(cadena).replace('[\'','').replace('\']','').replace(' ','')
+rango = len(lista)
 
-# convierte el texto en un array
-
-mi_lista = open(encadenado, 'r')
-mi_listado = mi_lista.read()
-mi_cadena = mi_listado.split(",")
-
-# guarda en la función "url_base" la dirección "estática" de cada elemento
-
-url_base = "http://consulta.archivogeneral.gov.co/ConsultaWeb/assets/image?id={}"
-repeticion = mi_cadena
-
-rago = len(repeticion) -1
-
-print("se están descargando %d imágenes" % (len(repeticion))) # rago o len(repeticion) revisar posible error
-
-# loop para descargar las imágenes o mostrar un mensaje de error
-for i in range(rago):
-        try: 
-                wget.download(url_base.format(repeticion[i]), "%s.jpg" % (i))
-        except:
-                sys.exit("algo salió mal :(")
-
-print("ha finalizado la descarga")
-wait = input("Presione ENTER para salir.")
+for i in range(rango):
+    url = url_base.format(lista[i])
+    down = urllib.request.urlretrieve(url, "%s/%s.jpg" % (directorio, i))

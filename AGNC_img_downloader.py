@@ -1,9 +1,6 @@
 import urllib.request
 import glob, wget, csv, os
 
-print("Antes de utilizar este archivo, asegúrese que la carpeta desde la cual se ejecuta esté vacía de archivos *.jpg y *.txt")
-wait = input("Presione ENTER para continuar.")
-
 #Convierte archivo csv a texto
 
 csv_file = input('Ingresa el nombre de tu archivo *.csv: ')

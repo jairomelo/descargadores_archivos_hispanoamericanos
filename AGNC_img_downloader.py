@@ -3,7 +3,7 @@ import os
 
 enlace = "http://consulta.archivogeneral.gov.co/ConsultaWeb/assets/image?id="
 directorio = input('Ingresa el nombre de la carpeta para guardar las imágenes: ')
-init = input('Número de la imágen inicial: ')
+init = input('Número de la imagen inicial: ')
 fin = input('Número de la página final: ')
 
 init_i = int(init)

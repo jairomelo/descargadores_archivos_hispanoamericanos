@@ -2,7 +2,7 @@ import requests, os, time
 
 directorio = input('Ingresa el nombre de la carpeta para guardar las imágenes: ')
 ident = input('Número de la colección: ')
-init = input('Número de la imágen inicial: ')
+init = input('Número de la imagen inicial: ')
 fin = input('Número de la página final: ')
 
 url_entrada = 'http://pares.mcu.es/ParesBusquedas20/catalogo/show/{}'.format(ident)

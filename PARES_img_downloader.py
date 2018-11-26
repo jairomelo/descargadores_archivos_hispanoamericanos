@@ -1,27 +1,63 @@
-import requests, os, time
+from selenium import webdriver
+from bs4 import BeautifulSoup
+import requests, time, os
 
-directorio = input('Ingresa el nombre de la carpeta para guardar las imágenes: ')
-ident = input('Número de la colección: ')
-init = input('Número de la imagen inicial: ')
-fin = input('Número de la página final: ')
+#########################################################################
 
-url_entrada = 'http://pares.mcu.es/ParesBusquedas20/catalogo/show/{}'.format(ident)
-url_imagen = 'http://pares.mcu.es/ParesBusquedas20/ViewImage.do?accion=42&txt_id_imagen=1&txt_rotar=0&txt_contraste=0&dbCode={}'
+
+ident = input('Ingresar número del expediente: ')
+
+num_imgs = input('cantidad de imágenes: ')
+rango = int(num_imgs)/8
+
+#########################################################################
+
+host = 'http://pares.mcu.es'
+ruta_entrada = '/ParesBusquedas20/catalogo/show/{}'.format(ident)
+url_entrada = '{}{}'.format(host, ruta_entrada)
+
+browser = webdriver.Chrome()
+browser.get(url_entrada)
 
 s = requests.Session()
-# La primera petición obtiene las cookies [https://es.stackoverflow.com/a/215235/51760]
-s.get(url_entrada)
 
-os.makedirs(directorio)
+#########################################################################
 
-init_i = int(init)
-fin_i = int(fin)
+r = s.get(url_entrada)
+soup = BeautifulSoup(r.content, 'html.parser')
+imgs = soup.select("div.thumbnail img")
 
-lista = range(init_i,fin_i)
+rutas = []
 
-for i in range(len(lista)):
-	url = url_imagen.format(lista[i])
-	r = s.get(url)
-	with open("%s/%s.jpg" % (directorio, i), 'wb') as handler:
-		handler.write(r.content)
-	time.sleep(3)
+def get_srcs():
+	for img in imgs:
+		obtener = "{}{}".format(host, img["src"])
+		rutas.append(obtener)
+
+#primapágina
+get_srcs()
+#resto de páginas
+for i in range(int(rango)):
+	i = browser.find_element_by_xpath('//*[@id="botonMasPeq"]')
+	i.click()
+	time.sleep(5)
+	get_srcs()
+
+#########################################################################
+
+if not os.path.exists(ident):
+	os.makedirs(ident)
+
+for i in range(len(rutas)):
+	cadenas = str(rutas)
+	encadenado = ''.join(cadenas).replace('[\'','').replace('\']',',').replace('&txt_transformacion=0','').replace('\'','')
+	mi_cadena = encadenado.split(",")
+	url_descarga = mi_cadena[i]
+	read = s.get(url_descarga)
+	with open("%s/%s.jpg" % (ident, i), 'wb') as handler:
+		handler.write(read.content)
+		time.sleep(1)
+
+#########################################################################
+
+browser.quit()

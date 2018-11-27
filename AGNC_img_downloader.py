@@ -7,7 +7,7 @@ init = input('Número de la imagen inicial: ')
 fin = input('Número de la página final: ')
 
 init_i = int(init)
-fin_i = int(fin)
+fin_i = int(fin) + 1
 
 url_base = "%s{}" % enlace
 lista = range(init_i,fin_i)

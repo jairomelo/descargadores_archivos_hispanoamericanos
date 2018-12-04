@@ -1,21 +1,28 @@
 import urllib.request
 import os
 
-enlace = input('Enlace del número del periódico. <br /> Pegue la liga solamente hasta el signo de % \(ejemplo: http://hemeroteca.vanguardia.com/hemeroteca/public/periodico/img_pdf/vl/1953/1953-11-02/vl19531102%\)<br /> : ')
-directorio = input('Ingresa el nombre de la carpeta para guardar las imágenes: ')
-init = input('Número de la imágen inicial: ')
-fin = input('Número de la página final: ')
+enlace_base = "http://hemeroteca.vanguardia.com/hemeroteca/public/periodico/img_pdf/vl/"
 
-os.makedirs(directorio)
+fecha_ini = input('Fecha inicial (YYYY-MM-DD): ')
 
-init_i = int(init)
-fin_i = int(fin)
+#string manipulation
 
-url_base = "%s{}.jpg" % enlace
+año_ini = fecha_ini[0:4]
+mes_ini = fecha_ini[5:7]
+dia_ini = fecha_ini[8:10]
+
+# formato url
+
+url_busqueda = "{}{}/{}-{}-{}/vl{}{}{}%".format(enlace_base,año_ini,año_ini,mes_ini,dia_ini,año_ini,mes_ini,dia_ini)
+
+if not os.path.exists(fecha_ini):
+	os.makedirs(fecha_ini)
+
+init_i = 201
+fin_i = 210
+
 lista = range(init_i,fin_i)
 
-rango = len(lista)
-
-for i in range(rango):
-    url = url_base.format(lista[i])
-    down = urllib.request.urlretrieve(url, "%s/%s.jpg" % (directorio, i))
+for i in range(len(lista)):
+    url = "{}{}.jpg".format(url_busqueda, lista[i])
+    down = urllib.request.urlretrieve(url, "{}/{}.jpg".format(fecha_ini, i))

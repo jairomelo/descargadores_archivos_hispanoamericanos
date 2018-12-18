@@ -15,4 +15,4 @@ os.makedirs(directorio)
 
 for i in range(len(lista)):
     url = "{}{}".format(enlace, lista[i])
-    down = urllib.request.urlretrieve(url, "{}/{}.jpg".format(directorio, i))
+    urllib.request.urlretrieve(url, "{}/{}.jpg".format(directorio, i))

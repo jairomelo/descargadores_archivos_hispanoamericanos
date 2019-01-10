@@ -1,9 +1,9 @@
 from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import requests, time, os
 
 #########################################################################
-
 
 ident = input('Ingresar número del expediente: ')
 
@@ -19,34 +19,37 @@ url_entrada = '{}{}'.format(host, ruta_entrada)
 browser = webdriver.Chrome()
 browser.get(url_entrada)
 
-s = requests.Session()
-
 #########################################################################
 
-r = s.get(url_entrada)
-soup = BeautifulSoup(r.content, 'html.parser')
+soup = BeautifulSoup(browser.page_source, 'html.parser')
 imgs = soup.select("div.thumbnail img")
 
 rutas = []
 
-def get_srcs():
-	for img in imgs:
-		obtener = "{}{}".format(host, img["src"])
-		rutas.append(obtener)
-
 #primapágina
-get_srcs()
+
+for img in imgs:
+	obtener = "{}{}".format(host, img["src"])
+	rutas.append(obtener)
+
 #resto de páginas
 for i in range(int(rango)):
 	i = browser.find_element_by_xpath('//*[@id="botonMasPeq"]')
 	i.click()
 	time.sleep(5)
-	get_srcs()
+	soup = BeautifulSoup(browser.page_source, 'html.parser')
+	imgs = soup.select("div.thumbnail img")
+	for img in imgs:
+		obtener = "{}{}".format(host, img["src"])
+		rutas.append(obtener)
 
 #########################################################################
 
 if not os.path.exists(ident):
 	os.makedirs(ident)
+
+s = requests.Session()
+read = s.get(url_entrada)
 
 for i in range(len(rutas)):
 	cadenas = str(rutas)
@@ -54,7 +57,7 @@ for i in range(len(rutas)):
 	mi_cadena = encadenado.split(",")
 	url_descarga = mi_cadena[i]
 	read = s.get(url_descarga)
-	with open("%s/%s.jpg" % (ident, i), 'wb') as handler:
+	with open("{}/{}.jpg".format(ident, i), 'wb') as handler:
 		handler.write(read.content)
 		time.sleep(1)
 

@@ -48,13 +48,14 @@ for i in range(int(rango)):
 if not os.path.exists(ident):
 	os.makedirs(ident)
 
+cadenas = str(rutas)
+encadenado = ''.join(cadenas).replace('[\'','').replace('\']',',').replace('&txt_transformacion=0','').replace('\'','').replace('&txt_contraste=0', '&txt_zoom=10&txt_contraste=0&txt_polarizado=&txt_brillo=10.0&txt_contrast=1.0')
+mi_cadena = encadenado.split(",")
+
 s = requests.Session()
 read = s.get(url_entrada)
 
 for i in range(len(rutas)):
-	cadenas = str(rutas)
-	encadenado = ''.join(cadenas).replace('[\'','').replace('\']',',').replace('&txt_transformacion=0','').replace('\'','').replace('&txt_contraste=0', '&txt_zoom=10&txt_contraste=0&txt_polarizado=&txt_brillo=10.0&txt_contrast=1.0')
-	mi_cadena = encadenado.split(",")
 	url_descarga = mi_cadena[i]
 	read = s.get(url_descarga)
 	with open("{}/{}.jpg".format(ident, i), 'wb') as handler:

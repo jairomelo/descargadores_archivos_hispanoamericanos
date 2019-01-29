@@ -1,7 +1,11 @@
+# -*- coding: utf-8 -*-
+
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from bs4 import BeautifulSoup
 import requests, time, os
+import reconex # Intento de solución de errores de conexión
+
 
 #########################################################################
 
@@ -36,12 +40,16 @@ for img in imgs:
 for i in range(int(rango)):
 	i = browser.find_element_by_xpath('//*[@id="botonMasPeq"]')
 	i.click()
-	time.sleep(5)
+	time.sleep(1)
 	soup = BeautifulSoup(browser.page_source, 'html.parser')
 	imgs = soup.select("div.thumbnail img")
 	for img in imgs:
 		obtener = "{}{}".format(host, img["src"])
 		rutas.append(obtener)
+
+print(rutas) # Línea sólo para desarrollo
+
+browser.quit()
 
 #########################################################################
 
@@ -51,17 +59,28 @@ if not os.path.exists(ident):
 cadenas = str(rutas)
 encadenado = ''.join(cadenas).replace('[\'','').replace('\']',',').replace('&txt_transformacion=0','').replace('\'','').replace('&txt_contraste=0', '&txt_zoom=10&txt_contraste=0&txt_polarizado=&txt_brillo=10.0&txt_contrast=1.0')
 mi_cadena = encadenado.split(",")
-
-s = requests.Session()
-read = s.get(url_entrada)
-
-for i in range(len(rutas)):
-	url_descarga = mi_cadena[i]
-	read = s.get(url_descarga)
-	with open("{}/{}.jpg".format(ident, i), 'wb') as handler:
-		handler.write(read.content)
-		time.sleep(1)
+print(mi_cadena) # Línea sólo para desarrollo
 
 #########################################################################
 
-browser.quit()
+from datetime import timedelta # solo para desarrollo
+
+inicio_loop = time.time() # Desarrollo : tiempo que toma en ejecutarse el programa
+for i in range(len(rutas)):
+	start = time.time()
+	if not os.path.exists("{}/{}.jpg".format(ident, i+1)):
+		s = requests.Session()
+		read = reconex.requests_retry_session(session=s).get(url_entrada) # Intento de solución de errores de conexión
+		url_descarga = mi_cadena[i]
+		read = reconex.requests_retry_session(session=s).get(url_descarga) # Intento de solución de errores de conexión
+		with open("{}/{}.jpg".format(ident, i+1), 'wb') as handler:
+			handler.write(read.content)
+			print("Descargando la imagen {}.jpg de {}".format(i+1, num_imgs))
+			lapso = (time.time() - start) # Desarrollo : tiempo que toma en ejecutarse el programa
+			print("Descargada en {} segundos".format(lapso)) # Desarrollo : tiempo que toma en ejecutarse el programa
+			time.sleep(1)
+
+lapso_loop = (time.time() - inicio_loop) # Desarrollo : tiempo que toma en ejecutarse el programa
+horminsec = str(timedelta(seconds=lapso_loop))
+
+print("Descargadas {} imágenes en {}".format(num_imgs,horminsec))

@@ -1,13 +1,11 @@
 /MAC_OS
 /test
 /archivos
-/VanguardiaLiberal
+/VanguardiaLiberal_borradores
 /__pycache__
-/AGNC
-/Pares
+/AGNC_borradores
+/Pares_borradores
+/0.9
 *.csv
 *.txt
-/66331
-/65620
-/65482
 debug.log

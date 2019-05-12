@@ -13,7 +13,7 @@ import urllib.request
 import requests, time, os
 import reconex
 
-ident = "VENE_1_1-97" # cambiar con cada descarga NO OLVIDAR!!!!!!!!!!!!!!!
+ident = input("NOMBRE_ARCHIVO_LOCAL: ") # ejemplo: "ANT_4_942-993" - Cambiar con cada descarga NO OLVIDAR!!!!!!!!!!!!!!!
 localhost = "http://localhost/ne/"
 source =  "{}{}.html".format(localhost,ident)
 

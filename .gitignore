@@ -9,4 +9,9 @@
 /0.9
 *.csv
 *.txt
+*.jpg
 debug.log
+AGNC/bin/
+AGNC/donwloader.py
+HGIS_Indias/
+NE/__pycache__/reconex.cpython-37.pyc

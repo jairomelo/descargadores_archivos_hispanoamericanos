@@ -27,7 +27,7 @@ def imagenes(url):
     numer = currentURL.query[20:22]
     code = browser.current_url.split('=')[4]
 
-    for i in range(int(numer)):
+    for i in range(int(numer) + 1):
         nova_url = "{}/visorimg/visorimg.php?page={}&item=0&max={}&CodR={}".format(rutabase, i, numer, code)
         print(nova_url)
 

@@ -1,4 +1,7 @@
+.*
 *.csv
 *.txt
 *.jpg
 Codigo/__pycache__/
+/Test
+/descargas
